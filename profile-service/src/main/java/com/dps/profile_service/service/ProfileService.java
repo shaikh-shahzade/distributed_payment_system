@@ -8,16 +8,13 @@ import com.dps.profile_service.entity.SellerProfile;
 
 public interface ProfileService {
 
-    ProfileResponse createProfile(String userId,
-            CreateProfileRequest request);
+	ProfileResponse createProfile(String userId, CreateProfileRequest request);
 
-    ProfileResponse getProfile(String userId);
+	ProfileResponse getProfile(String userId);
 
-    ProfileResponse updateProfile(String userId,
-            UpdateProfileRequest request);
+	ProfileResponse updateProfile(String userId, UpdateProfileRequest request);
 
-    BankAccountResponse getBankAccount(String sellerId);
+	BankAccountResponse getBankAccount(String sellerId);
 
-    void updateKycStatus(String sellerId,
-            SellerProfile.KycStatus status);
+	void updateKycStatus(String sellerId, SellerProfile.KycStatus status);
 }

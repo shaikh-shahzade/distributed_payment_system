@@ -1,4 +1,7 @@
-CREATE TABLE
+CREATE DATABASE IF NOT EXISTS profile_db;
+USE profile_db;
+
+CREATE TABLE IF NOT EXISTS 
     seller_profile (
         user_id VARCHAR(36) NOT NULL,
         business_name VARCHAR(100) NOT NULL,

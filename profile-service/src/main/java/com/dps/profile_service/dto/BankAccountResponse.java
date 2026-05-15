@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Used by payment-executor — only returns what it needs
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
