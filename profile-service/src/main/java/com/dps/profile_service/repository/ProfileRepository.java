@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.dps.profile_service.entity.SellerProfile;
 
 @Repository
-public interface ProfileRepository
-        extends JpaRepository<SellerProfile, String> {
+public interface ProfileRepository extends JpaRepository<SellerProfile, String> {
 
-    Optional<SellerProfile> findByUserId(String userId);
+	Optional<SellerProfile> findByUserId(String userId);
 }

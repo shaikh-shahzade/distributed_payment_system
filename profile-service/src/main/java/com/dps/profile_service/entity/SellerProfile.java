@@ -25,41 +25,41 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SellerProfile implements Serializable {
 
- @Id
- @Column(name = "user_id", length = 36)
- private String userId; 
+	@Id
+	@Column(name = "user_id", length = 36)
+	private String userId;
 
- @Column(name = "business_name", nullable = false, length = 100)
- private String businessName;
+	@Column(name = "business_name", nullable = false, length = 100)
+	private String businessName;
 
- @Column(name = "bank_account", nullable = false, length = 50)
- private String bankAccount;
+	@Column(name = "bank_account", nullable = false, length = 50)
+	private String bankAccount;
 
- @Column(name = "bank_name", nullable = false, length = 100)
- private String bankName;
+	@Column(name = "bank_name", nullable = false, length = 100)
+	private String bankName;
 
- @Column(name = "ifsc_code", nullable = false, length = 20)
- private String ifscCode;
+	@Column(name = "ifsc_code", nullable = false, length = 20)
+	private String ifscCode;
 
- @Enumerated(EnumType.STRING)
- @Column(name = "kyc_status", nullable = false)
- private KycStatus kycStatus = KycStatus.PENDING;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "kyc_status", nullable = false)
+	private KycStatus kycStatus = KycStatus.PENDING;
 
- @Column(name = "preferred_currency", length = 3)
- private String preferredCurrency = "INR";
+	@Column(name = "preferred_currency", length = 3)
+	private String preferredCurrency = "INR";
 
- @Column(name = "contact_phone", length = 15)
- private String contactPhone;
+	@Column(name = "contact_phone", length = 15)
+	private String contactPhone;
 
- @Column(name = "created_at", updatable = false)
- @CreationTimestamp
- private LocalDateTime createdAt;
+	@Column(name = "created_at", updatable = false)
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 
- @Column(name = "updated_at")
- @UpdateTimestamp
- private LocalDateTime updatedAt;
+	@Column(name = "updated_at")
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 
- public enum KycStatus {
-     PENDING, VERIFIED, REJECTED
- }
+	public enum KycStatus {
+		PENDING, VERIFIED, REJECTED
+	}
 }

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BankAccountResponse {
 
-    private String userId;
-    private String bankAccount;
-    private String bankName;
-    private String ifscCode;
-    private String preferredCurrency;
+	private String userId;
+	private String bankAccount;
+	private String bankName;
+	private String ifscCode;
+	private String preferredCurrency;
 }

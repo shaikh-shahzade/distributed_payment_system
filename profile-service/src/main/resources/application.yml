@@ -17,19 +17,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate        # Flyway handles schema — never let JPA create tables
+      ddl-auto: validate  
     show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
    
-   # SQL Script Initialization
+   # Schema Initialization
   sql:
     init:
-      mode: always  # Always run scripts
-      schema-locations: classpath:schema.sql  # Schema creation
-      #data-locations: classpath:data.sql      # Initial data
+      mode: always
+      schema-locations: classpath:schema.sql
       continue-on-error: false
       encoding: UTF-8
 
@@ -43,13 +42,8 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: 1800000    # 30 minutes in milliseconds
+      time-to-live: 1800000    # 30 minutes 
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8180/realms/payment-realm
 
 eureka:
   client:
@@ -71,5 +65,8 @@ management:
 
 logging:
   level:
-    com.dps.profile: DEBUG
-    org.springframework.cache: DEBUG 
+    'com.dps.profile_service': DEBUG
+    'org.springframework.cache': TRACE
+    'org.springframework.data.redis': DEBUG
+    'org.hibernate.SQL': DEBUG
+    

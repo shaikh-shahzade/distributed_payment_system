@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProfileResponse {
 
-    private String userId;
-    private String businessName;
-    private String bankAccount;
-    private String bankName;
-    private String ifscCode;
-    private String kycStatus;
-    private String preferredCurrency;
-    private String contactPhone;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+	private String userId;
+	private String businessName;
+	private String bankAccount;
+	private String bankName;
+	private String ifscCode;
+	private String kycStatus;
+	private String preferredCurrency;
+	private String contactPhone;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 }
