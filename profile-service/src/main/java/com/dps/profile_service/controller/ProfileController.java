@@ -26,51 +26,41 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/profiles")
 public class ProfileController {
-    
-    @Autowired
-    private ProfileService profileService;
-    
-    @PostMapping
-    public ProfileResponse createProfile(
-            @RequestHeader("X-User-Id") String userId,
-            @RequestHeader("X-User-Role") String role,
-            @Valid @RequestBody CreateProfileRequest request) {
-        return profileService.createProfile(userId, request);
-    }
-    
-    @GetMapping("/me")
-    public ProfileResponse getProfile(
-            @RequestHeader("X-User-Id") String userId) {
- return profileService.getProfile(userId);
-    }
-    
-    @PutMapping("/me")
-    public ProfileResponse updateProfile(
-            @RequestHeader("X-User-Id") String userId,
-            @Valid @RequestBody UpdateProfileRequest request) {
-        
-        return profileService.updateProfile(userId, request);
-    }
-    
-    // Internal endpoint for payment executor (get bank account)
-    @GetMapping("/{sellerId}/bank-account")
-    public BankAccountResponse getBankAccount(
-            @PathVariable String sellerId,
-            @RequestHeader(value = "X-Gateway-Secret", required = false) String secret) {
 
-        
-        return profileService.getBankAccount(sellerId);
-    }
-    
-    // Admin endpoint
-    @PatchMapping("/{sellerId}/kyc")
-    public void updateKycStatus(
-            @PathVariable String sellerId,
-            @RequestHeader("X-User-Role") String role,
-            @RequestBody SellerProfile.KycStatus request) {
-        
-    	profileService.updateKycStatus(sellerId, request);
-    }
-    
-    
+	@Autowired
+	private ProfileService profileService;
+
+	@PostMapping
+	public ProfileResponse createProfile(@RequestHeader("X-User-Id") String userId,
+			@RequestHeader("X-User-Role") String role, @Valid @RequestBody CreateProfileRequest request) {
+		return profileService.createProfile(userId, request);
+	}
+
+	@GetMapping("/me")
+	public ProfileResponse getProfile(@RequestHeader("X-User-Id") String userId) {
+		return profileService.getProfile(userId);
+	}
+
+	@PutMapping("/me")
+	public ProfileResponse updateProfile(@RequestHeader("X-User-Id") String userId,
+			@Valid @RequestBody UpdateProfileRequest request) {
+
+		return profileService.updateProfile(userId, request);
+	}
+
+	// Used for payment executor (get bank account)
+	@GetMapping("/{sellerId}/bank-account")
+	public BankAccountResponse getBankAccount(@PathVariable String sellerId) {
+
+		return profileService.getBankAccount(sellerId);
+	}
+
+	// Admin updates KYC
+	@PatchMapping("/{sellerId}/kyc")
+	public void updateKycStatus(@PathVariable String sellerId, @RequestHeader("X-User-Role") String role,
+			@RequestBody SellerProfile.KycStatus request) {
+
+		profileService.updateKycStatus(sellerId, request);
+	}
+
 }
