@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: eureka-server
+  
+  cloud:
+    config:
+      enabled: false
+
+management:
+  server:
+    port: ${EUREKA_MANAGEMENT_PORT:8762}
