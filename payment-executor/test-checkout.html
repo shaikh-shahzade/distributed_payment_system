@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .checkout {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.09);
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+    }
+
+    .product-header {
+      background: linear-gradient(135deg, #1e3a5f, #3a86ff);
+      color: #fff;
+      padding: 28px 28px 22px;
+    }
+
+    .product-header .label {
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+
+    .product-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .product-header .amount {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .product-header .amount span {
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    .body {
+      padding: 24px 28px 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #222;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3a86ff;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 20px 0;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 14px;
+      background: #3a86ff;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .pay-btn:hover  { background: #2563eb; }
+    .pay-btn:active { transform: scale(0.98); }
+    .pay-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+
+    .secure-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 12px;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      line-height: 1.65;
+      display: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .result.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .result.error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+  </style>
+</head>
+<body>
+<div class="checkout">
+
+  <div class="product-header">
+    <div class="label">Order Summary</div>
+    <h2>DPS Marketplace</h2>
+    <div class="amount" id="displayAmount">₹500<span>INR</span></div>
+  </div>
+
+  <div class="body">
+
+    <div class="field">
+      <label>Razorpay Order ID</label>
+      <input id="razorpayOrderId" type="text" placeholder="order_xxxxxxxxxxxxxxxx" />
+    </div>
+
+    <div class="field">
+      <label>Amount (₹)</label>
+      <input id="amount" type="number" value="500" min="1" step="0.01"
+             oninput="document.getElementById('displayAmount').innerHTML =
+               '₹' + (this.value || 0) + '<span>INR</span>'" />
+    </div>
+
+    <div class="field">
+      <label>Your Name</label>
+      <input id="name" type="text" placeholder="John Doe" value="Test Buyer" />
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input id="email" type="email" placeholder="you@example.com" value="test@example.com" />
+    </div>
+
+    <div class="field">
+      <label>Phone</label>
+      <input id="phone" type="tel" placeholder="9999999999" value="9999999999" />
+    </div>
+
+    <hr class="divider" />
+
+    <button class="pay-btn" id="payBtn" onclick="pay()">Pay ₹500</button>
+    <p class="secure-note">🔒 Secured by Razorpay</p>
+
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
+<script>
+  const RZP_KEY = "YOUR_RAZORPAY_KEY";
+
+  document.getElementById("amount").addEventListener("input", function () {
+    document.getElementById("payBtn").textContent = "Pay ₹" + (this.value || 0);
+  });
+
+  function showResult(msg, type) {
+    const el = document.getElementById("result");
+    el.textContent = msg;
+    el.className = "result " + type;
+    el.style.display = "block";
+  }
+
+  function pay() {
+    const orderId = document.getElementById("razorpayOrderId").value.trim();
+    const amount  = parseFloat(document.getElementById("amount").value);
+
+    if (!orderId) {
+      showResult("Paste a Razorpay Order ID first.\n\nCreate one via:\nPOST /api/v1/executor/payment/execute", "error");
+      return;
+    }
+
+    const btn = document.getElementById("payBtn");
+    btn.disabled = true;
+
+    const rzp = new Razorpay({
+      key:         RZP_KEY,
+      order_id:    orderId,
+      amount:      Math.round(amount * 100),
+      currency:    "INR",
+      name:        "DPS Marketplace",
+      description: "Order Payment",
+      prefill: {
+        name:    document.getElementById("name").value,
+        email:   document.getElementById("email").value,
+        contact: document.getElementById("phone").value
+      },
+      theme: { color: "#3a86ff" },
+
+      handler: function (response) {
+        showResult(
+          "Payment successful!\n\n" +
+          "razorpay_order_id   : " + response.razorpay_order_id   + "\n" +
+          "razorpay_payment_id : " + response.razorpay_payment_id + "\n" +
+          "razorpay_signature  : " + response.razorpay_signature  + "\n\n" +
+          "Razorpay will now fire a webhook to your service.\n" +
+          "POST /api/v1/webhook/razorpay → status → SUCCESS → Kafka: payment.approved",
+          "success"
+        );
+        btn.disabled = false;
+      },
+
+      modal: {
+        ondismiss: function () {
+          btn.disabled = false;
+        }
+      }
+    });
+
+    rzp.on("payment.failed", function (r) {
+      showResult(
+        "Payment failed!\n\n" +
+        "reason : " + r.error.reason + "\n" +
+        "desc   : " + r.error.description + "\n\n" +
+        "Webhook will fire payment.failed → service retries up to 3× → Kafka: payment.failed",
+        "error"
+      );
+      btn.disabled = false;
+    });
+
+    rzp.open();
+  }
+</script>
+</body>
+</html>
